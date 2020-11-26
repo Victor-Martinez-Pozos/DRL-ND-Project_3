@@ -1,15 +1,10 @@
-import copy
-import os
-import random
-from collections import namedtuple, deque
+#!/usr/bin/env python
+# coding: utf-8
+from .ddpg import ddpg_agent, ReplayBuffer, device
 
 import numpy as np
 import torch
-import torch.nn.functional as F
 import torch.optim as optim
-
-from ddpg_agent import ddpg_agent, ReplayBuffer, device
-from model import Actor, Critic
 
 BUFFER_SIZE = int(1e6)          # replay buffer size
 BATCH_SIZE = 512                # minibatch size
@@ -60,9 +55,9 @@ class maddpg_agent:
         if len(self.memory) > BATCH_SIZE and timestep%LEARNING_PERIOD == 0:
             for a_i, agent in enumerate(self.agents):
                 experiences = self.memory.sample()
-                self.learn(experiences, a_i)
+                self.update(experiences, a_i)
             
-    def learn(self, experiences, agent_number):
+    def update(self, experiences, agent_number):
         """ The critic takes as its input the combined observations and 
         actions from all agents. Collect actions from each agent for the 'experiences'. """
         next_actions = []

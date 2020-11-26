@@ -8,7 +8,7 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 
-from model import Actor, Critic
+from .models import Actor, Critic
 
 GAMMA = 0.99                    # discount factor
 TAU = 5e-2                      # for soft update of target parameters
