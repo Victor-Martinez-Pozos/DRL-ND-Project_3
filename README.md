@@ -2,7 +2,7 @@
 
 ## Description
 
-In this project I trained a maddpg agent to solve the unity environment "Tennis" which consist of two agents that try to control rackets to bounce a ball over a net, the states and actions in the environment consists as follows:
+In this project I trained a modified version of a maddpg agent that uses a distributional approach in the critic to solve the unity environment "Tennis" which consist of two agents that try to control rackets to bounce a ball over a net, the states and actions in the environment consists as follows:
 
 * Vector Observation space: 8 variables corresponding to the position and velocity of the ball and racket.
 * Vector Action space: (Continuous) Size of 2. corresponding to movement toward (or away from) the net, and jumping
