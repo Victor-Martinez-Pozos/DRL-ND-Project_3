@@ -18,11 +18,19 @@ To train or test the sac_agent.
 
 1. Clone this repo.
 2. Create a virtual environment.
-2. Over the environment run `pip install -r requirements.txt`
+3. Over the environment run `pip install -r requirements.txt`
+4. Download the unity environment from one of the follows:
+    *Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
+    *Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
+    *Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86.zip)
+    *Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86_64.zip)
+5. Extract its conted in the project directory.
 
 ## Instructions
 
-All the code to train or to test the sac agent is contained inside the **'Continuous_Control.ipynb'** file and following the cell instructions you can train an agent from scratch or test it loading the saved model.
+All the code to train or to test the sac agent is contained inside the **'Tennis.ipynb'**, and following the cell instructions you can train an agent from scratch or test it loading the saved model.
+
+Note: Make the nesessary change to the environment path and name to match them to the previous download set of files.
 
 ## Results
 
