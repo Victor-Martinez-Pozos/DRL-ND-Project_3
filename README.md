@@ -33,5 +33,5 @@ The agent was able to achive a reward of +0.5 after 2883 episodes.
 ## Citations
 The code of this repo is based/inspired from the github projects: 
 
-/Deep-Reinforcement-Learning-Hands-On from **@PacktPublishing**
-/Deep-Reinforcement-Learning-Algorithms from **@rafael1s** 
+- /Deep-Reinforcement-Learning-Hands-On from **@PacktPublishing**
+- /Deep-Reinforcement-Learning-Algorithms from **@rafael1s** 
