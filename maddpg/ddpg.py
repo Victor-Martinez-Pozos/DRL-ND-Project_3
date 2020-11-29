@@ -8,7 +8,7 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 
-from .models import Actor, Critic, D4PGCritic
+from .models import Actor, D4PGCritic
 
 GAMMA = 0.99                    # discount factor
 TAU = 5e-2                      # for soft update of target parameters
@@ -47,18 +47,12 @@ class ddpg_agent:
         self.actor_target = Actor(state_size, action_size).to(device)
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(), lr=LR_ACTOR)
 
-        self.critic_local = Critic(state_size, action_size).to(device)
-        self.critic_target = Critic(state_size, action_size).to(device)
-        self.critic_optimizer = optim.Adam(self.critic_local.parameters(),  
-             lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
-
         self.crt_local = D4PGCritic(state_size, action_size, N_ATOMS, Vmin, Vmax).to(device)
         self.crt_target = D4PGCritic(state_size, action_size, N_ATOMS, Vmin, Vmax).to(device)
         self.crt_optimizer = optim.Adam(self.crt_local.parameters(), lr=LR_CRITIC)
         # Make sure that the target-local model pairs are initialized to the 
         # same weights
         self.hard_update(self.actor_local, self.actor_target)
-        self.hard_update(self.critic_local, self.critic_target)
         self.hard_update(self.crt_local, self.crt_target)
 
         self.noise = OUNoise(action_size, random_seed)
@@ -102,30 +96,6 @@ class ddpg_agent:
         """
         states, actions, rewards, next_states, dones = experiences
         agent_id_tensor = torch.tensor([self.agent_id - 1]).to(device)
-
-        """
-        ### Update critic
-        self.critic_optimizer.zero_grad()
-        Q_targets_next = self.critic_target(next_states, next_actions)        
-        Q_targets = rewards.index_select(1, agent_id_tensor) + \
-               (GAMMA * Q_targets_next *  (1 - dones.index_select(1, agent_id_tensor)))
-        Q_expected = self.critic_local(states, actions)
-        # Minimize the loss
-        critic_loss = F.mse_loss(Q_expected, Q_targets)
-        critic_loss.backward()
-        self.critic_optimizer.step()
-
-        ### Update actor
-        self.actor_optimizer.zero_grad()
-        # Minimize the loss
-        actor_loss = -self.critic_local(states, actions_pred).mean()
-        actor_loss.backward()
-        self.actor_optimizer.step()
-
-        ### Update target networks
-        self.soft_update(self.critic_local, self.critic_target, TAU)
-        self.soft_update(self.actor_local, self.actor_target, TAU)
-        """
 
         # train critic
         self.crt_optimizer.zero_grad()
