@@ -7,7 +7,7 @@ import torch
 import torch.optim as optim
 
 BUFFER_SIZE = int(1e6)          # replay buffer size
-BATCH_SIZE = 512                # minibatch size
+BATCH_SIZE = 512                # minibatch size 512
 LEARNING_PERIOD = 2             # weight update frequency
 
 class maddpg_agent:
@@ -80,8 +80,28 @@ class maddpg_agent:
         actions_pred = torch.cat(actions_pred, dim=1).to(device)
         
         agent = self.agents[agent_number]
-        agent.learn(experiences, next_actions, actions_pred)
-                
+        agent.learn(experiences, next_actions, actions_pred, agent_number)
+
+    def save(self, idx, path="weigths"):
+        for i in range(self.num_agents):
+            torch.save(self.agents[i].actor_local.state_dict(),
+                     f'{path}/actor({i})_{idx}.pth' )
+            torch.save(self.agents[i].critic_local.state_dict(), 
+                     f'{path}/critic({i})_{idx}.pth' )
+
+    def load(self, idx, path="weigths"):
+
+        if torch.cuda.is_available():
+            map_location=lambda storage, loc: storage.cuda()
+        else:
+            map_location='cpu'
+
+        for i in range(self.num_agents):
+            self.agents[i].actor_local.load_state_dict(torch.load(f'{path}/actor({i})_{idx}.pth', map_location=map_location)) 
+
+            self.agents[i].critic_local.load_state_dict(torch.load(f'{path}/critic({i})_{idx}.pth', map_location=map_location))
+
+
     def _get_agent_number(self, i):
         """Helper to get an agent's number as a Torch tensor."""
         return torch.tensor([i]).to(device)
